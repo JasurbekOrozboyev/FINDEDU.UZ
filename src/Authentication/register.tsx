@@ -126,10 +126,7 @@ const RegisterPage: React.FC = () => {
         value={formData.image}
         onChange={handleChange}
       />
-      <button
-        type="submit"
-        className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-      >
+      <button type="submit" className="py-2 rounded transition" >
         Ro'yxatdan o'tish
       </button>
     </form>

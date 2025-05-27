@@ -8,6 +8,9 @@ import Home from "./page/Home";
 import Register from "./Authentication/register";
 import Login from "./Authentication/login"
 import VerifyOtpPage from "./Authentication/verifyOTP";
+import Headers from "./components/header";
+import Profile from "./page/profile";
+
 
 function App() {
 
@@ -16,9 +19,11 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/header" element={<Headers />} />
         <Route path="/nav" element={<Navbar />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/verifyOtpPage" element={<VerifyOtpPage />} />
       </Routes>
     </Router>
