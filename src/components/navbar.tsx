@@ -81,16 +81,16 @@ function Navbar() {
     };
 
     const handleLogout = () => {
-  localStorage.removeItem('accessToken'); // 1. localStorage tozalansin
-  localStorage.removeItem('refreshToken'); // 1. localStorage tozalansin
-  setUser(null);                          // 2. userni null qilish
-  handleClose();                          // 3. menyuni yopish
-  navigate('/');                          // 4. bosh sahifaga yo'naltirish
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken'); 
+  setUser(null);                        
+  handleClose();                        
+  navigate('/');                         
 };
 
 
   return (
-    <div>
+    <div >
       <div className='flex justify-between items-center pl-5 pr-5 p-3 shadow-2xl'>
         <ul>
           <li>

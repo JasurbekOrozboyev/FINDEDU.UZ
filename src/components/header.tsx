@@ -1,8 +1,8 @@
 
 function Headers(){
     return(
-        <div>
-            <h1 className="text-9xl text-center">Header</h1>
+        <div className="min-h-screen bg-center bg-no-repeat bg-cover"
+      style={{ backgroundImage: "url('/bg.jpg')" }}>
         </div>
     )
 }
