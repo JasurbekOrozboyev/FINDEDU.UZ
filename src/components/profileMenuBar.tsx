@@ -52,14 +52,12 @@ export default function UserMenu({ user, onLogout }: Props) {
           'aria-labelledby': 'user-menu-button',
         }}
       >
-        {/* 1-chi item: firstName lastName */}
         <MenuItem onClick={handleClose}>
           <Typography fontWeight="bold">
             {user.firstName} {user.lastName}
           </Typography>
         </MenuItem>
 
-        {/* 2-chi item: firstName lastName va email pastda */}
         <MenuItem onClick={handleClose} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography fontWeight="bold">
             {user.firstName} {user.lastName}
@@ -69,7 +67,6 @@ export default function UserMenu({ user, onLogout }: Props) {
           </Typography>
         </MenuItem>
 
-        {/* 3-chi item: Log out */}
         <MenuItem onClick={handleLogout} sx={{ color: 'red', fontWeight: 'bold' }}>
           Log Out
         </MenuItem>
