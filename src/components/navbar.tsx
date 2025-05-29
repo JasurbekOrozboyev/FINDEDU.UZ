@@ -28,6 +28,12 @@ function Navbar() {
   const Login = () => {
     navigate('/login'); 
   };
+  const Home = () => {
+    navigate('/')
+  }
+  const Resources = () => {
+    navigate('/Resources')
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
     setLanguage(event.target.value);
@@ -91,17 +97,17 @@ function Navbar() {
 
   return (
     <div >
-      <div className='flex justify-between items-center pl-5 pr-5 p-3 shadow-2xl'>
+      <div className='flex justify-between items-center pl-5 pr-5 p-3 shadow-xl bg-gradient-to-b from-sky-400 to-white'>
         <ul>
-          <li>
+          <li onClick={Home}>
             <p className='text-2xl font-serif font-bold text-[#1976D5]'>EDUCATION</p>
           </li>
         </ul>
 
         <ul className='flex justify-between items-center gap-3'>
-          <li><Stack><Button>Home</Button></Stack></li>
+          <li onClick={Home}><Stack><Button>Home</Button></Stack></li>
           <li><Stack><Button>About</Button></Stack></li>
-          <li><Stack><Button>Resources</Button></Stack></li>
+          <li onClick={Resources}><Stack><Button>Resources</Button></Stack></li>
           <li><Stack><Button>Favorites</Button></Stack></li>
           <li><Stack><Button>Appointments</Button></Stack></li>
           <li><MenuBar/></li>
@@ -109,7 +115,7 @@ function Navbar() {
 
         <ul className='flex justify-between items-center gap-5'>
           <li>
-            <Box sx={{ minWidth: 150, minHeight: 40 }}>
+            <Box sx={{ minWidth: 150, minHeight: 40, }}>
               <FormControl fullWidth>
                 <Select
                   labelId="demo-simple-select-label"
@@ -163,7 +169,7 @@ function Navbar() {
               <li>
                 <button
                   onClick={Login}
-                  className='bg-[#0c447d] text-white hover:bg-white hover:text-[#1976D5] border px-12 py-4 rounded-full '
+                  className='border-from-sky-400 text-[#1976D5] shadow-xl px-12 py-4 rounded-full hover:bg-white hover:text-[#1976D5]'
                 >
                   Login
                 </button>
@@ -171,7 +177,7 @@ function Navbar() {
               <li>
                 <button
                   onClick={Register}
-                  className='bg-[#0c447d] text-white hover:bg-white hover:text-[#1976D5] border px-15 py-4 rounded-full '
+                  className='border-from-sky-400 text-[#1976D5] shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full '
                 >
                   Register
                 </button>

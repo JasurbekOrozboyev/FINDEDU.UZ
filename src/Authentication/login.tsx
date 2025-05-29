@@ -74,31 +74,25 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div >
-      <h2>Login</h2>
-
-      <input
-        type="email"
-        placeholder="Emailingiz"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-       
-      />
-      <br />
-
-      <input
-        type="password"
-        placeholder="Parolingiz"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-
-      <button onClick={handleLoginAndRefresh}>
-        Kirish
-      </button>
-
-      {error && <p className=''>{error}</p>}
+    <div className='flex justify-center items-center min-h-screen gap-20 bg-[#cfe1f3] relative'>
+      <div className='absolute top-10 left-10'>
+         <p className='text-4xl font-serif font-bold text-[#1976D5]'>EDUCATION</p>
+      </div>
+      <div>
+        <img className='w-130' src="/children.png" alt="" />
+      </div>
+          <div className='border rounded-2xl border-gray-400 shadow-xl w-150 h-80 p-10 flex flex-col justify-center items-center bg-white'>
+            <h1 className='text-center text-3xl font-bold font-serif mb-3 text-[#1976D5]'>Login</h1>
+          <input className='border w-full h-10 rounded p-2' type="email" placeholder="Emailingiz" value={email} onChange={(e) => setEmail(e.target.value)}/>
+          <br />
+          <input className='border w-full h-10 rounded p-2' type="password" placeholder="Parolingiz" value={password} onChange={(e) => setPassword(e.target.value)}
+          />
+          <br />
+          <button className="w-50 bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full" onClick={handleLoginAndRefresh}>
+            Login
+          </button>
+          {error && <p className=''>{error}</p>}
+        </div>
     </div>
   );
 };
