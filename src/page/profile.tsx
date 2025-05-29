@@ -135,67 +135,38 @@ export default function UserProfile() {
   return (
     <div className="mx-auto text-gray-700">
       <Navbar />
-      <div className="mt-10 m-auto max-w-250 h-100 p-10 rounded shadow-2xl flex items-center gap-20 relative">
-        <button onClick={() => setEditMode(true)} className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 absolute right-5 top-0" >
-          Edit
+      <div className="mt-10 m-auto max-w-250 h-100 p-10 rounded shadow-2xl flex items-center gap-20 relative bg-white">
+        <button onClick={() => setEditMode(true)} className="mt-4 bg-[#1976D5] text-white px-6 py-2 rounded absolute right-5 top-0" >
+          Edit Profile
         </button>
-        <button onClick={handleDelete} className="mt-6 bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 absolute bottom-5">
+        <button onClick={handleDelete} className="border border-red-600 text-red-600 mt-6 px-6 py-2 rounded absolute bottom-5">
           Akkauntni delete
         </button>
         <div className="flex items-center gap-6 mb-6">
-          <img
-            src={user.image}
-            alt={user.lastName}
-            className="w-20 h-20 rounded-full object-cover border"
-          />
-          
+          <img src={user.image} alt={user.lastName} className="w-20 h-20 rounded-full object-cover border"/>
         </div>
 
         {editMode ? (
           <div className="space-y-4">
             <div>
               <label className="block font-semibold mb-1">First Name</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              />
+              <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} className="w-full border px-3 py-2 rounded"/>
             </div>
             <div>
               <label className="block font-semibold mb-1">Last Name</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              />
+              <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} className="w-full border px-3 py-2 rounded"/>
             </div>
             
             <div>
               <label className="block font-semibold mb-1">Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              />
+              <input type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full border px-3 py-2 rounded"/>
             </div>
 
             <div className="flex gap-4">
-              <button
-                onClick={handleSave}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
+              <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 Saqlash
               </button>
-              <button
-                onClick={() => setEditMode(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-              >
+              <button onClick={() => setEditMode(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
                 Bekor qilish
               </button>
             </div>

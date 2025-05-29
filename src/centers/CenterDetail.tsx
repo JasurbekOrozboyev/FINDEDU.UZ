@@ -259,20 +259,10 @@ const CenterDetail: React.FC = () => {
 
             {center.comments && center.comments.length > 0 ? (
               <ul>
-                     <div className="mt-6">
-              <textarea
-                placeholder="Comment yozing..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                disabled={submitting}
-                className="w-full border border-gray-300 rounded-md p-2"
-              />
+              <div className="mt-6">
+              <textarea placeholder="Comment yozing..." value={commentText} onChange={(e) => setCommentText(e.target.value)} disabled={submitting} className="w-full border border-gray-300 rounded-md p-2"/>
               {submitError && <p className="text-red-500 mt-1">{submitError}</p>}
-              <button
-                onClick={handleSubmitComment}
-                disabled={submitting}
-                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
-              >
+              <button onClick={handleSubmitComment} disabled={submitting} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400">
                 Yuborish
               </button>
             </div>
@@ -286,27 +276,13 @@ const CenterDetail: React.FC = () => {
 
                     {editingCommentId === comment.id ? (
                       <>
-                        <textarea
-                          rows={3}
-                          className="w-full border border-gray-300 rounded-md p-2"
-                          value={editingText}
-                          onChange={(e) => setEditingText(e.target.value)}
-                          disabled={submitting}
-                        />
+                        <textarea rows={3} className="w-full border border-gray-300 rounded-md p-2" value={editingText} onChange={(e) => setEditingText(e.target.value)} disabled={submitting}/>
                         {submitError && <p className="text-red-500 mt-1">{submitError}</p>}
                         <div className="mt-2 space-x-2">
-                          <button
-                            onClick={handleEditComment}
-                            disabled={submitting}
-                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400"
-                          >
+                          <button onClick={handleEditComment} disabled={submitting} className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400">
                             Saqlash
                           </button>
-                          <button
-                            onClick={handleCancelEdit}
-                            disabled={submitting}
-                            className="px-3 py-1 bg-gray-400 text-black rounded hover:bg-gray-500 disabled:bg-gray-300"
-                          >
+                          <button onClick={handleCancelEdit} disabled={submitting} className="px-3 py-1 bg-gray-400 text-black rounded hover:bg-gray-500 disabled:bg-gray-300">
                             Bekor qilish
                           </button>
                         </div>
@@ -318,16 +294,10 @@ const CenterDetail: React.FC = () => {
                           {new Date(comment.createdAt).toLocaleString()}
                         </p>
                         <div className="mt-1 space-x-2">
-                          <button
-                            onClick={() => handleStartEdit(comment)}
-                            className="text-blue-600 hover:underline"
-                          >
+                          <button onClick={() => handleStartEdit(comment)} className="text-blue-600 hover:underline">
                             Tahrirlash
                           </button>
-                          <button
-                            onClick={() => handleDeleteComment(comment.id)}
-                            className="text-red-600 hover:underline"
-                          >
+                          <button onClick={() => handleDeleteComment(comment.id)} className="text-red-600 hover:underline">
                             O'chirish
                           </button>
                         </div>

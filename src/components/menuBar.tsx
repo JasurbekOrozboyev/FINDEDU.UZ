@@ -8,12 +8,23 @@ export default function BasicMenu() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
-     navigate('/createcenter');
+  };
+
+  const handleCreateCenter = () => {
+    setAnchorEl(null);
+    navigate('/createcenter');
+  };
+
+  const handleMyCenters = () => {
+    setAnchorEl(null);
+    navigate('/mycenters');
   };
 
   return (
@@ -25,19 +36,19 @@ export default function BasicMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-       CEO Dashboard
+        CEO Dashboard
       </Button>
       <Menu
         id="basic-menu"
-        anchorEl={anchorEl} 
+        anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Create Center</MenuItem>
-        <MenuItem onClick={handleClose}>My center</MenuItem>
+        <MenuItem onClick={handleCreateCenter}>Create Center</MenuItem>
+        <MenuItem onClick={handleMyCenters}>My center</MenuItem>
       </Menu>
     </div>
   );

@@ -85,8 +85,7 @@ const Login: React.FC = () => {
             <h1 className='text-center text-3xl font-bold font-serif mb-3 text-[#1976D5]'>Login</h1>
           <input className='border w-full h-10 rounded p-2' type="email" placeholder="Emailingiz" value={email} onChange={(e) => setEmail(e.target.value)}/>
           <br />
-          <input className='border w-full h-10 rounded p-2' type="password" placeholder="Parolingiz" value={password} onChange={(e) => setPassword(e.target.value)}
-          />
+          <input className='border w-full h-10 rounded p-2' type="password" placeholder="Parolingiz" value={password} onChange={(e) => setPassword(e.target.value)}/>
           <br />
           <button className="w-50 bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full" onClick={handleLoginAndRefresh}>
             Login

@@ -97,7 +97,7 @@ function Navbar() {
 
   return (
     <div >
-      <div className='flex justify-between items-center pl-5 pr-5 p-3 shadow-xl bg-gradient-to-b from-sky-400 to-white'>
+      <div className='flex justify-between items-center pl-5 pr-5 p-3 shadow-xl bg-gradient-to-b from-sky-300 to-white'>
         <ul>
           <li onClick={Home}>
             <p className='text-2xl font-serif font-bold text-[#1976D5]'>EDUCATION</p>
@@ -105,13 +105,20 @@ function Navbar() {
         </ul>
 
         <ul className='flex justify-between items-center gap-3'>
-          <li onClick={Home}><Stack><Button>Home</Button></Stack></li>
-          <li><Stack><Button>About</Button></Stack></li>
-          <li onClick={Resources}><Stack><Button>Resources</Button></Stack></li>
-          <li><Stack><Button>Favorites</Button></Stack></li>
-          <li><Stack><Button>Appointments</Button></Stack></li>
-          <li><MenuBar/></li>
-        </ul>
+  <li onClick={Home}><Stack><Button>Home</Button></Stack></li>
+  <li><Stack><Button>About</Button></Stack></li>
+  <li onClick={Resources}><Stack><Button>Resources</Button></Stack></li>
+
+  {user && (
+    <>
+      <li><Stack><Button>Favorites</Button></Stack></li>
+      <li><Stack><Button>Appointments</Button></Stack></li>
+    </>
+  )}
+  
+  <li><MenuBar/></li>
+</ul>
+
 
         <ul className='flex justify-between items-center gap-5'>
           <li>
@@ -157,28 +164,22 @@ function Navbar() {
         </ul>
         </MenuItem>
         <MenuItem  onClick={() => {
-    handleClose();       
-    navigate('/profile');
-  }}>Edit Profile</MenuItem>
-        <MenuItem onClick={handleLogout}>Log out</MenuItem>
-      </Menu>
-    </div>
+              handleClose();       
+              navigate('/profile');
+            }}>Edit Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Log out</MenuItem>
+                </Menu>
+              </div>
             </li>
           ) : (
             <>
               <li>
-                <button
-                  onClick={Login}
-                  className='border-from-sky-400 text-[#1976D5] shadow-xl px-12 py-4 rounded-full hover:bg-white hover:text-[#1976D5]'
-                >
+                <button onClick={Login} className='border-from-sky-400 text-[#1976D5] shadow-xl px-12 py-4 rounded-full hover:bg-white hover:text-[#1976D5]'>
                   Login
                 </button>
               </li>
               <li>
-                <button
-                  onClick={Register}
-                  className='border-from-sky-400 text-[#1976D5] shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full '
-                >
+                <button onClick={Register} className='border-from-sky-400 text-[#1976D5] shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full '>
                   Register
                 </button>
               </li>

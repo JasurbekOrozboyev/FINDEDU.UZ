@@ -15,6 +15,7 @@ import CenterDetail from "./centers/CenterDetail";
 import Resources from './page/Resources'
 import Allcategories from './Categories/Allcategories'
 import CreateCenter from './page/CreateCenter'
+import MyCenters from "./centers/mycenter";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/allcategories" element={<Allcategories />} />
         <Route path="/createcenter" element={<CreateCenter />} />
+        <Route path="/mycenters" element={<MyCenters />} />
         <Route path="/header" element={<Headers />} />
         <Route path="/nav" element={<Navbar />} />
         <Route path="/register" element={<Register />} />

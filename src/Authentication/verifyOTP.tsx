@@ -88,26 +88,10 @@ const VerifyOtpPage: React.FC = () => {
         {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
         {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
-        <Box
-          component="form"
-          onSubmit={handleVerifyOtp}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-        >
-          <TextField
-            label="Emailga kelgan OTP kodni kiriting"
-            variant="outlined"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            required
-          />
+        <Box component="form" onSubmit={handleVerifyOtp} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <TextField label="Emailga kelgan OTP kodni kiriting" variant="outlined" value={otp} onChange={(e) => setOtp(e.target.value)} required           />
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={loading}
-          >
+          <Button type="submit" variant="contained" color="primary" size="large" disabled={loading}>
             {loading ? "Tekshirilmoqda..." : "OTP tasdiqlash"}
           </Button>
         </Box>

@@ -61,12 +61,7 @@ const CategoriesPage: React.FC = () => {
   return (
     <div className="container mx-auto mt-10 px-4">
       <div className="flex justify-center mb-6">
-        <input
-          type="text"
-          placeholder="Resurs nomi bo'yicha qidirish..."
-          className="w-full m-3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+        <input type="text" placeholder="Resurs nomi bo'yicha qidirish..." className="w-full m-3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
@@ -81,32 +76,24 @@ const CategoriesPage: React.FC = () => {
       {!loading && !error && (
         <>
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <div
-              className={`w-44 cursor-pointer border rounded-lg overflow-hidden transition-all hover:shadow-lg ${
+            <div className={`w-44 cursor-pointer border rounded-lg overflow-hidden transition-all hover:shadow-lg ${
                 selectedCategory === null ? "border-blue-500" : "border-gray-300"
               }`}
-              onClick={() => handleCategoryClick(null)}
-            >
+              onClick={() => handleCategoryClick(null)}>
               <div className="bg-gray-100 h-full flex items-center justify-center text-center font-semibold">
                 Barchasi resurslar
               </div>
             </div>
 
             {categories.map((category) => (
-              <div
-                key={category.id}
-                className={`w-44 cursor-pointer border rounded-lg overflow-hidden transition-all hover:shadow-lg ${
+              <div key={category.id} className={`w-44 cursor-pointer border rounded-lg overflow-hidden transition-all hover:shadow-lg ${
                   selectedCategory?.id === category.id
                     ? "border-blue-500"
                     : "border-gray-300"
                 }`}
                 onClick={() => handleCategoryClick(category)}
               >
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-24 object-cover"
-                />
+                <img src={category.image} alt={category.name} className="w-full h-24 object-cover"/>
                 <div className="p-2 text-center font-semibold">{category.name}</div>
               </div>
             ))}
@@ -115,27 +102,15 @@ const CategoriesPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredResources.length > 0 ? (
               filteredResources.map((resource) => (
-                <div
-                  key={resource.id}
-                  className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-md transition"
-                >
-                  <img
-                    src={resource.image}
-                    alt={resource.name}
-                    className="h-40 w-full object-cover rounded mb-3"
-                  />
+                <div key={resource.id} className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-md transition">
+                  <img src={resource.image} alt={resource.name} className="h-40 w-full object-cover rounded mb-3"/>
                   <h3 className="text-lg font-bold">{resource.name}</h3>
                   <p className="text-sm text-gray-600 mb-3">
                     {resource.description}
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-700">Oldindan ko'rish</span>
-                    <a
-                      href={resource.media}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-600 text-white px-4 py-1 text-sm rounded hover:bg-blue-700"
-                    >
+                    <a href={resource.media} target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white px-4 py-1 text-sm rounded hover:bg-blue-700">
                       Yuklab olish
                     </a>
                   </div>

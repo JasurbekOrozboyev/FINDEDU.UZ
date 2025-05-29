@@ -83,79 +83,20 @@ const RegisterPage: React.FC = () => {
           </h1>
 
           <div className="flex justify-between items-center gap-4">
-            <input
-              className="border rounded p-2 w-full"
-              name="firstName"
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-            <input
-              className="border rounded p-2 w-full"
-              name="lastName"
-              placeholder="Last Name"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-            />
+            <input className="border rounded p-2 w-full" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required/>
+            <input className="border rounded p-2 w-full" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required/>
           </div>
+          <input className="border rounded p-2 w-full" name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} required/>
+          <input className="border rounded p-2 w-full" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required/>
+          <input className="border rounded p-2 w-full" name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} required/>
 
-          <input
-            className="border rounded p-2 w-full"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            className="border rounded p-2 w-full"
-            name="phone"
-            placeholder="Phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            className="border rounded p-2 w-full"
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-
-          <select
-            className="border rounded p-2 w-full"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-          >
+          <select className="border rounded p-2 w-full" name="role" value={formData.role} onChange={handleChange} required>
             <option value="USER">USER</option>
             <option value="CEO">CEO</option>
           </select>
-
-          <input
-            className="border rounded p-2 w-full"
-            name="image"
-            type="text"
-            placeholder="Image filename (ixtiyoriy)"
-            value={formData.image}
-            onChange={handleChange}
-          />
-
+          <input className="border rounded p-2 w-full" name="image" type="text" placeholder="Image filename (ixtiyoriy)" value={formData.image} onChange={handleChange}/>
           <center>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-80 bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-10 py-4 rounded-full"
-            >
+            <button type="submit" disabled={loading} className="w-80 bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-10 py-4 rounded-full">
               {loading ? "Yuborilmoqda..." : "Ro'yxatdan o'tish"}
             </button>
           </center>

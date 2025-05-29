@@ -10,7 +10,9 @@ function Headers(){
             <button className="bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full absolute right-15 mt-50">Batafsil</button>
         </div>
         </div>
-        <section></section>
+        <section>
+            
+        </section>
     
         </div>
     )

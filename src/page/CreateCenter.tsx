@@ -1,10 +1,11 @@
 import Navbar from "../components/navbar";
+import CreateCenterPage from "../centers/CreateCenter";
 
 function CreateCenter() {
     return(
         <div>
             <Navbar/>
-            <h2>Create center</h2>
+            <CreateCenterPage/>
         </div>
     )
 }
