@@ -93,7 +93,7 @@ const CategoriesPage: React.FC = () => {
                 }`}
                 onClick={() => handleCategoryClick(category)}
               >
-                <img src={category.image} alt={category.name} className="w-full h-24 object-cover"/>
+                <img src="/res.jpg" alt="#" className="w-full h-24 object-cover"/>
                 <div className="p-2 text-center font-semibold">{category.name}</div>
               </div>
             ))}
