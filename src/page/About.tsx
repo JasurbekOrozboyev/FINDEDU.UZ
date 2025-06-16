@@ -1,6 +1,9 @@
+import Headers from "../components/header";
 function About() {
-    return (
-            <div>About</div>
-    )
+  return (
+    <div>
+        <Headers/>
+    </div>
+  )
 }
 export default About;

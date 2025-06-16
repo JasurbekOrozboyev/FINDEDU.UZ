@@ -1,11 +1,10 @@
-import Navbar from "../components/navbar";
 import Allcategories from '../Categories/Allcategories'
-
+import Headers from '../components/header';
 
 function Resources() {
     return(
         <div>
-            <Navbar/>
+            <Headers/>
             <Allcategories/>
         </div>
     )

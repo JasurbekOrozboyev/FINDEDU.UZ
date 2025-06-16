@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { type AlertProps } from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { useTheme } from '@mui/material/styles'; 
 
-interface Login {
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+interface LoginResponse {
   accessToken: string;
   refreshToken: string;
 }
@@ -9,13 +19,15 @@ interface Login {
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('info');
+
+  const theme = useTheme(); 
 
   const handleLoginAndRefresh = async () => {
-    navigate('/'); 
-    setError('');
-   
+    setSnackbarMessage('');
+    setOpenSnackbar(false);
 
     try {
       const loginRes = await fetch('https://findcourse.net.uz/api/users/login', {
@@ -28,19 +40,19 @@ const Login: React.FC = () => {
       });
 
       if (!loginRes.ok) {
-        throw new Error('Login xatoligi: ' + loginRes.status);
+        const errorData = await loginRes.json().catch(() => ({ message: "Login qilishda noma'lum xato yuz berdi." }));
+        throw new Error(errorData.message || `Login xatoligi: ${loginRes.status}`);
       }
 
-      const loginData: any = await loginRes.json();
+      const loginData: LoginResponse = await loginRes.json();
       console.log('LOGIN RESPONSE:', loginData);
 
       if (!loginData.refreshToken) {
-        throw new Error('refreshToken topilmadi login javobida');
+        throw new Error('refreshToken');
       }
 
       localStorage.setItem('accessToken', loginData.accessToken);
       localStorage.setItem('refreshToken', loginData.refreshToken);
-
 
       const refreshRes = await fetch('https://findcourse.net.uz/api/users/refreshToken', {
         method: 'POST',
@@ -52,15 +64,11 @@ const Login: React.FC = () => {
       });
 
       if (!refreshRes.ok) {
-        throw new Error('Refresh token xatoligi: ' + refreshRes.status);
+        const errorData = await refreshRes.json().catch(() => ({ message: "Token yangilashda xato yuz berdi." }));
+        throw new Error(errorData.message || `Refresh token xatoligi: ${refreshRes.status}`);
       }
 
-      const refreshData: any = await refreshRes.json();
-      console.log('REFRESH RESPONSE:', refreshData);
-
-      if (!refreshData.accessToken) {
-        throw new Error('Yangi accessToken topilmadi');
-      }
+      const refreshData: LoginResponse = await refreshRes.json();
 
       localStorage.setItem('accessToken', refreshData.accessToken);
 
@@ -68,30 +76,68 @@ const Login: React.FC = () => {
         localStorage.setItem('refreshToken', refreshData.refreshToken);
       }
 
+      setSnackbarMessage("Muvaffaqiyatli kirdingiz!");
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
+
     } catch (err) {
-      setError((err as Error).message || 'Xatolik yuz berdi');
+      const errorMessage = (err as Error).message;
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      console.error("Login xatosi:", err);
     }
   };
 
+  const handleCloseSnackbar = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
   return (
-    <div className='flex justify-center items-center min-h-screen gap-20 bg-[#cfe1f3] relative'>
-      <div className='absolute top-10 left-10'>
-         <p className='text-4xl font-serif font-bold text-[#1976D5]'>EDUCATION</p>
+    <div
+      className='flex justify-center items-center min-h-screen gap-20 relative'
+      style={{
+        backgroundColor: theme.palette.background.default, 
+        color: theme.palette.text.primary,}}>
+      <div
+        className='border rounded-2xl shadow-xl w-150 h-80 p-10 flex flex-col justify-center items-center ml-2 mr-2'
+        style={{
+          backgroundColor: theme.palette.background.paper, 
+          borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.grey[400], 
+        }}>
+        <h1
+          className='text-center text-[#461773] text-3xl font-bold font-serif mb-3'>
+          Login
+        </h1>
+        <TextField label="Emailingiz" variant="outlined" type="email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth margin="normal"/>
+        <TextField label="Parolingiz" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)} fullWidth margin="normal"/>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#461773", 
+            color: theme.palette.primary.contrastText, 
+            fontSize: '1.25rem',
+            padding: '1rem 3rem',
+            borderRadius: '9999px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            marginTop: '1rem'
+          }}
+          onClick={handleLoginAndRefresh}>
+          Login
+        </Button>
       </div>
-      <div>
-        <img className='w-130' src="/children.png" alt="" />
-      </div>
-          <div className='border rounded-2xl border-gray-400 shadow-xl w-150 h-80 p-10 flex flex-col justify-center items-center bg-white'>
-            <h1 className='text-center text-3xl font-bold font-serif mb-3 text-[#1976D5]'>Login</h1>
-          <input className='border w-full h-10 rounded p-2' type="email" placeholder="Emailingiz" value={email} onChange={(e) => setEmail(e.target.value)}/>
-          <br />
-          <input className='border w-full h-10 rounded p-2' type="password" placeholder="Parolingiz" value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <br />
-          <button className="w-50 bg-[#1976D5] text-white text-xl shadow-xl hover:bg-white hover:text-[#1976D5] px-15 py-4 rounded-full" onClick={handleLoginAndRefresh}>
-            Login
-          </button>
-          {error && <p className=''>{error}</p>}
-        </div>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

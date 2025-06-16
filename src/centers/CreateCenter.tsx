@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Container, TextField, Button, Typography, Select, MenuItem, FormControl, InputLabel, FormControlLabel, Checkbox, FormGroup, Box, Alert, CircularProgress,
+} from "@mui/material";
+import type { SelectChangeEvent } from '@mui/material/Select'; 
+
 
 interface Major {
   id: number;
@@ -17,18 +21,24 @@ const CreateCenterPage = () => {
 
   const [majors, setMajors] = useState<Major[]>([]);
   const [message, setMessage] = useState("");
+  const [loadingMajors, setLoadingMajors] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchMajors = async () => {
       try {
+        setLoadingMajors(true);
         const res = await fetch("https://findcourse.net.uz/api/major");
         if (!res.ok) throw new Error("Yo'nalishlarni olishda xatolik yuz berdi");
         const data = await res.json();
         setMajors(data.data || []);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Yo'nalishlarni olishda xatolik:", err);
+        setMessage("Xatolik: Yo'nalishlarni yuklashda muammo yuz berdi.");
+      } finally {
+        setLoadingMajors(false);
       }
     };
 
@@ -36,12 +46,12 @@ const CreateCenterPage = () => {
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<number> 
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "regionId" ? Number(value) : value,
+      [name as string]: name === "regionId" ? Number(value) : value,
     }));
   };
 
@@ -57,9 +67,12 @@ const CreateCenterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    setMessage(""); 
 
     if (!accessToken) {
       setMessage("Token topilmadi. Iltimos, tizimga qayta kiring.");
+      setSubmitting(false);
       return;
     }
 
@@ -73,12 +86,12 @@ const CreateCenterPage = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Yuborishda xatolik");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Yuborishda xatolik yuz berdi");
+      }
 
-    const data = await res.json();
-    setMajors(data.data || []);
-
-      alert("Markaz muvaffaqiyatli qo'shildi!");
+      setMessage("Markaz muvaffaqiyatli qo'shildi!");
       setFormData({
         name: "",
         regionId: 1,
@@ -89,49 +102,66 @@ const CreateCenterPage = () => {
       });
     } catch (err: any) {
       setMessage("Xatolik: " + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 border rounded shadow bg-white">
-      <h2 className="text-2xl font-bold mb-4">Yangi o'quv markazi qo'shish</h2>
-      {message && <p className="mb-4 text-blue-600">{message}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="name" placeholder="Nomi" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded" required/>
-        <input name="address" placeholder="Manzil" value={formData.address} onChange={handleChange} className="w-full p-2 border rounded" required/>
-        <input name="image" type="file" placeholder="Rasm URL (masalan: center.jpg)" value={formData.image} onChange={handleChange} className="w-full p-2 border rounded"/>
-        <input name="phone" placeholder="Telefon" value={formData.phone} onChange={handleChange} className="w-full p-2 border rounded"/>
+    <Container maxWidth="sm" sx={{ mt: 4, mb: 4, p: 3, border: "1px solid #e0e0e0", borderRadius: 2, boxShadow: 3, bgcolor: "background.paper" }}>
+      <Typography variant="h5" component="h2" gutterBottom align="center">
+        Yangi o'quv markazi qo'shish
+      </Typography>
+      {message && (
+        <Alert severity={message.includes("muvaffaqiyatli") ? "success" : "error"} sx={{ mb: 2 }}>
+          {message}
+        </Alert>
+      )}
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <TextField name="name" label="Nomi" value={formData.name} onChange={handleChange} fullWidth required/>
+        <TextField name="address" label="Manzil" value={formData.address} onChange={handleChange} fullWidth required/>
+        <TextField name="image" type="file" label="Rasm" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }}/>
+        <TextField name="phone" label="Telefon" value={formData.phone} onChange={handleChange} fullWidth/>
 
-        <select name="regionId" value={formData.regionId} onChange={handleChange} className="w-full p-2 border rounded">
-          <option value={1}>Toshkent</option>
-          <option value={2}>Andijon</option>
-          <option value={3}>Namangan</option>
-          <option value={4}>Buxoro</option>
-          <option value={5}>Jizzax</option>
-          <option value={6}>Qashqadaryo</option>
-          <option value={7}>Samarqand</option>
-        </select>
+        <FormControl fullWidth>
+          <InputLabel id="region-select-label">Viloyat</InputLabel>
+          <Select labelId="region-select-label" name="regionId" value={formData.regionId} label="Viloyat" onChange={handleChange}>
+            <MenuItem value={1}>Toshkent</MenuItem>
+            <MenuItem value={2}>Andijon</MenuItem>
+            <MenuItem value={3}>Namangan</MenuItem>
+            <MenuItem value={4}>Buxoro</MenuItem>
+            <MenuItem value={5}>Jizzax</MenuItem>
+            <MenuItem value={6}>Qashqadaryo</MenuItem>
+            <MenuItem value={7}>Samarqand</MenuItem>
+          </Select>
+        </FormControl>
 
-        <div>
-            <p className="font-medium mb-2">Yo'nalishlar:</p>
-            {majors.length === 0 ? (
-                <p>Yuklanmoqda...</p>
-            ) : (
-                <div className="grid grid-cols-2 gap-2">
-                {majors.map((major) => (
-                    <label key={major.id} className="flex items-center">
-                    <input type="checkbox" value={major.id} checked={formData.majorsId.includes(major.id)} onChange={handleMajorsChange} className="mr-2"/>
-                    {major.name}
-                    </label>
-                ))}
-                </div>
-            )}
-        </div>
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Yuborish
-        </button>
-      </form>
-    </div>
+        <Box>
+          <Typography variant="subtitle1" gutterBottom>
+            Yo'nalishlar:
+          </Typography>
+          {loadingMajors ? (
+            <Box display="flex" justifyContent="center" py={2}>
+              <CircularProgress />
+            </Box>
+          ) : majors.length === 0 ? (
+            <Typography>Yo'nalishlar topilmadi.</Typography>
+          ) : (
+            <FormGroup row>
+              {majors.map((major) => (
+                <FormControlLabel key={major.id} control={
+                    <Checkbox value={major.id} checked={formData.majorsId.includes(major.id)} onChange={handleMajorsChange}/>
+                  }
+                  label={major.name}/>
+              ))}
+            </FormGroup>
+          )}
+        </Box>
+        <Button  type="submit" variant="contained" color="primary" fullWidth disabled={submitting}>
+          <p className="text-black ">{submitting ? <CircularProgress size={24} color="inherit" /> : "Yuborish"}</p>
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

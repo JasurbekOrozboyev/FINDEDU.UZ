@@ -1,11 +1,11 @@
-import Navbar from "../components/navbar";
 import Allcenters from '../centers/Allcenters'
+import Headers from '../components/header';
 
 function Home() {
 
   return (
    <div>
-    <Navbar/>
+    <Headers/>
     <Allcenters/>
 
    </div>

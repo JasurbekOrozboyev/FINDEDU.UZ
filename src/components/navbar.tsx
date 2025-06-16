@@ -2,35 +2,51 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-
-import MenuBar from './menuBar';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import type { SelectChangeEvent } from '@mui/material';
-import { Box, FormControl, Select, MenuItem } from '@mui/material';
-
-import * as React from 'react';
+import { Box, FormControl, Select, MenuItem, IconButton, Avatar } from '@mui/material';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useTheme } from '@mui/material/styles';
+import { type PaletteMode } from '@mui/material';
+import MenuList from './menuBar'; 
+import * as React from 'react'; 
 import Menu from '@mui/material/Menu';
+import { useTranslation } from 'react-i18next'; 
 
 interface UserData {
   firstName: string;
   lastName: string;
   email: string;
+  image: string;
 }
 
-function Navbar() {
-  const [language, setLanguage] = useState('eng');
+interface NavbarProps {
+  toggleColorMode: () => void;
+  currentMode: PaletteMode;
+}
+
+function Navbar({ toggleColorMode }: NavbarProps) {
+  const { t, i18n } = useTranslation(); 
+
   const [user, setUser] = useState<UserData | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+
+  const BASE_URL = 'https://findcourse.net.uz'; 
 
   const Register = () => navigate('/register');
+  const About = () => navigate('/about');
   const Login = () => navigate('/login');
   const Home = () => navigate('/');
   const Resources = () => navigate('/Resources');
+  const Appointments = () => navigate('/appointments');
+  const Favorites = () => navigate("/favorites");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
+    i18n.changeLanguage(event.target.value); 
   };
 
   useEffect(() => {
@@ -40,7 +56,7 @@ function Navbar() {
       return;
     }
 
-    fetch('https://findcourse.net.uz/api/users/mydata', {
+    fetch(`${BASE_URL}/api/users/mydata`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -48,15 +64,35 @@ function Navbar() {
       },
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error('User ma\'lumotlari olinmadi');
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            setUser(null);
+            navigate('/login');
+          }
+          throw new Error("user ma'lumotlari kelmadi");
+        }
         return res.json();
       })
       .then((json) => {
         if (json.data) {
+            const userImagePath = json.data.image;
+            let fullImageUrl = '/default-profile.png'; 
+
+            if (userImagePath) {
+                if (userImagePath.startsWith('http://') || userImagePath.startsWith('https://')) {
+                    fullImageUrl = userImagePath;
+                } else {
+                    fullImageUrl = `${BASE_URL}/api/image/${userImagePath}`;
+                }
+            }
+
           setUser({
             firstName: json.data.firstName,
-            lastName: json.data.lastName,
+            lastName: json.data.lastName, 
             email: json.data.email,
+            image: fullImageUrl,
           });
         } else {
           setUser(null);
@@ -66,7 +102,7 @@ function Navbar() {
         console.error(err);
         setUser(null);
       });
-  }, []);
+  }, [navigate]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -83,142 +119,156 @@ function Navbar() {
     localStorage.removeItem('refreshToken');
     setUser(null);
     handleClose();
-    navigate('/');
+    window.location.href = '/'; 
   };
 
   return (
     <div>
-      {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed top-0 left-0 h-full w-64 ${theme.palette.mode === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} shadow-lg transform transition-transform duration-300 z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-end p-4">
-          <button onClick={() => setSidebarOpen(false)} className="text-gray-600 font-bold text-xl">×</button>
+          <button onClick={() => setSidebarOpen(false)} className={`${theme.palette.mode === 'dark' ? 'text-gray-300' : 'text-gray-600'} font-bold text-xl`}>{t('close')}</button>
         </div>
         <ul className="flex flex-col gap-4 p-4 text-lg">
-          <li onClick={() => { setSidebarOpen(false); Home(); }}>Home</li>
-          <li onClick={() => { setSidebarOpen(false); Resources(); }}>Resources</li>
-          <li onClick={() => setSidebarOpen(false)}>About</li>
+          <li onClick={() => { setSidebarOpen(false); Home(); }}>{t('home')}</li>
+          <li onClick={() => { setSidebarOpen(false); Resources(); }}>{t('resources')}</li>
+          <li onClick={() => { setSidebarOpen(false); About(); }}>{t('about')}</li>
 
-          {/* Til tanlash faqat sidebar ichida (faqat kichik ekranlar uchun) */}
           <li className="lg:hidden">
             <Box sx={{ minWidth: 150 }}>
               <FormControl fullWidth>
                 <Select
                   id="sidebar-language-select"
-                  value={language}
+                  value={i18n.language || 'uz'}
                   onChange={handleChange}
                   size="small"
-                >
-                  <MenuItem value="uz">O'zbek tili</MenuItem>
-                  <MenuItem value="ru">Русский</MenuItem>
-                  <MenuItem value="eng">English</MenuItem>
+                  sx={{ color: theme.palette.text.primary }}>
+                  <MenuItem value="uz">{t('uzbekLanguage')}</MenuItem>
+                  <MenuItem value="ru">{t('russianLanguage')}</MenuItem>
+                  <MenuItem value="eng">{t('englishLanguage')}</MenuItem>
                 </Select>
               </FormControl>
             </Box>
           </li>
 
           {user && (
-            <>
-              <li>Favorites</li>
-              <li>Appointments</li>
-              <li onClick={() => { setSidebarOpen(false); navigate('/profile'); }}>Edit Profile</li>
-              <li onClick={() => { setSidebarOpen(false); handleLogout(); }}>Logout</li>
-            </>
+            <div>
+              <li onClick={() => { setSidebarOpen(false); Favorites(); }}>{t('favorites')}</li>
+              <li onClick={() => { setSidebarOpen(false); Appointments(); }}>{t('appointments')}</li>
+              <li><MenuList/></li> 
+              <li onClick={() => { setSidebarOpen(false); navigate('/profile'); }}>{t('editProfile')}</li>
+              <li onClick={() => { setSidebarOpen(false); handleLogout(); }}>{t('logout')}</li>
+            </div>
           )}
           {!user && (
-            <>
-              <li onClick={() => { setSidebarOpen(false); Login(); }}>Login</li>
-              <li onClick={() => { setSidebarOpen(false); Register(); }}>Register</li>
-            </>
+            <div>
+              <li onClick={() => { setSidebarOpen(false); Login(); }}>{t('login')}</li>
+              <li onClick={() => { setSidebarOpen(false); Register(); }}>{t('register')}</li>
+            </div>
           )}
+          <li className="flex items-center gap-2 mt-4">
+            <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+              {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+            <span className={`${theme.palette.mode === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              {theme.palette.mode === 'dark' ? t('lightMode') : t('darkMode')}
+            </span>
+          </li>
         </ul>
       </div>
 
-      {/* Top Navbar */}
-      <div className="flex justify-between items-center pl-5 pr-5 p-3 shadow-xl">
+      <div className={`flex justify-between items-center pl-5 pr-5 p-3 shadow-xl ${theme.palette.mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
         <ul onClick={Home}>
           <li>
-            <p className="text-2xl font-serif font-bold text-[#1976D5]">EDUCATION</p>
+            <p className="text-2xl font-serif font-bold text-[#461773] hidden sm:block">{t('education')}</p>
           </li>
         </ul>
 
         <ul className="hidden lg:flex justify-between items-center gap-3">
-          <li onClick={Home}><Stack><Button>Home</Button></Stack></li>
-          <li><Stack><Button>About</Button></Stack></li>
-          <li onClick={Resources}><Stack><Button>Resources</Button></Stack></li>
+          <li onClick={Home}><Stack><Button sx={{ color: theme.palette.text.primary }}>{t('home')}</Button></Stack></li>
+          <li onClick={About}><Stack><Button sx={{ color: theme.palette.text.primary }}>{t('about')}</Button></Stack></li>
+          <li onClick={Resources}><Stack><Button sx={{ color: theme.palette.text.primary }}>{t('resources')}</Button></Stack></li>
           {user && (
             <>
-              <li><Stack><Button>Favorites</Button></Stack></li>
-              <li><Stack><Button>Appointments</Button></Stack></li>
+              <li onClick={() => { Favorites(); }}><Stack><Button sx={{ color: theme.palette.text.primary }}>{t('favorites')}</Button></Stack></li>
+              <li onClick={Appointments}><Stack><Button sx={{ color: theme.palette.text.primary }}>{t('appointments')}</Button></Stack></li>
+              <li><MenuList/></li>
             </>
           )}
-          <li><MenuBar /></li>
         </ul>
 
         <ul className="flex justify-between items-center gap-5">
-          {/* Til tanlash - faqat katta ekranlar uchun */}
+          <li>
+            <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+              {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </li>
+
           <li className="hidden lg:block">
             <Box sx={{ minWidth: 150, minHeight: 40 }}>
               <FormControl fullWidth>
-                <Select
-                  id="language-select"
-                  value={language}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="uz">O'zbek tili</MenuItem>
-                  <MenuItem value="ru">Русский</MenuItem>
-                  <MenuItem value="eng">English</MenuItem>
+                <Select id="language-select" value={i18n.language || 'uz'} onChange={handleChange} sx={{ color: theme.palette.text.primary }}>
+                  <MenuItem value="uz">{t('uzbekLanguage')}</MenuItem>
+                  <MenuItem value="ru">{t('russianLanguage')}</MenuItem>
+                  <MenuItem value="eng">{t('englishLanguage')}</MenuItem>
                 </Select>
               </FormControl>
             </Box>
           </li>
 
           {user ? (
-            <li className="text-[#1976D5] font-semibold">
-              <div>
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                >
-                  {user.firstName} {user.lastName}
-                </Button>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>
+            <div className="flex items-center gap-2">
+                <Button id="basic-button" aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick} sx={{ color: theme.palette.text.primary, padding: '6px 8px', minWidth: 'auto' }}>
+                <Avatar src={user.image || '/default-profile.png'} alt={`${user.firstName} ${user.lastName}`} sx={{ width: 40, height:40, mr: 1 }}/>
+                  <span className="md:block text-[#461773] font-semibold">
+                    {user.firstName} {user.lastName} 
+                  </span>
+               </Button>
+               <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+              PaperProps={{
+                sx: {
+                  backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#fff',
+                  color: theme.palette.text.primary,
+                },
+              }}>
+                <MenuItem onClick={handleClose}>
+                <div className="flex items-center gap-3">
+                    <Avatar 
+                        src={user.image || '/default-profile.png'} 
+                        alt={`${user.firstName} ${user.lastName}`} 
+                        sx={{ width: 40, height: 40, border: '1px solid #461773' }}
+                    />
                     <ul>
-                      <li className="text-xl font-bold font-serif">{user.firstName} {user.lastName}</li>
-                      <li className="text-[12px] text-gray-500">{user.email}</li>
+                        <li className={`text-xl font-bold font-serif ${theme.palette.mode === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                            {user.firstName} {user.lastName}
+                        </li>
+                        <li className="text-[12px] text-gray-500">{user.email}</li>
                     </ul>
-                  </MenuItem>
-                  <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}>Edit Profile</MenuItem>
-                  <MenuItem onClick={handleLogout}>Log out</MenuItem>
+                </div>
+                    </MenuItem>
+                    <MenuItem onClick={() => { handleClose(); navigate('/profile'); }} sx={{ color: theme.palette.text.primary }}>{t('editProfile')}</MenuItem>
+                    <MenuItem onClick={handleLogout} sx={{ color: theme.palette.text.primary }}>{t('logout')}</MenuItem>
                 </Menu>
               </div>
-            </li>
           ) : (
             <>
-              <li className="hidden lg:block">
-                <button onClick={Login} className="border text-[#1976D5] shadow-xl px-5 py-2 rounded-full hover:bg-white hover:text-[#1976D5]">
-                  Login
-                </button>
+              <li className="hidden lg:block ">
+                <Button onClick={Login} variant="outlined" sx={{ color: '#461773', borderColor: '#461773', borderRadius: '9999px', '&:hover': { backgroundColor: theme.palette.mode === 'dark' ? 'rgba(70, 23, 115, 0.1)' : 'rgba(70, 23, 115, 0.04)'} }}>
+                  {t('login')}
+                </Button>
               </li>
               <li className="hidden lg:block">
-                <button onClick={Register} className="border text-[#1976D5] shadow-xl px-5 py-2 rounded-full hover:bg-white hover:text-[#1976D5]">
-                  Register
-                </button>
+                <Button onClick={Register} variant="outlined" sx={{ color: '#461773', borderColor: '#461773', borderRadius: '9999px', '&:hover': { backgroundColor: theme.palette.mode === 'dark' ? 'rgba(70, 23, 115, 0.1)' : 'rgba(70, 23, 115, 0.04)'} }}>
+                  {t('register')}
+                </Button>
               </li>
             </>
           )}
 
           <li className="lg:hidden">
-            <button onClick={() => setSidebarOpen(true)}>
-              <FontAwesomeIcon icon={faBars} size="2x" className="text-[#1976D5]" />
+            <button onClick={() => setSidebarOpen(true)}> 
+              <FontAwesomeIcon icon={faBars} size="2x" className="text-[#461773]" />
             </button>
           </li>
         </ul>

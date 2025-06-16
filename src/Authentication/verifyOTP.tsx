@@ -65,7 +65,7 @@ const VerifyOtpPage: React.FC = () => {
         navigate("/login");
       }, 1500);
     } catch (error) {
-      setErrorMsg("Tarmoqda muammo yuz berdi, iltimos keyinroq qayta urinib ko'ring.");
+      setErrorMsg("Tarmoqda muammo yuz berdi.");
       console.error(error);
       setLoading(false);
     }
@@ -75,24 +75,21 @@ const VerifyOtpPage: React.FC = () => {
     <Container maxWidth="sm">
       <Paper
         elevation={3}
-        sx={{ mt: 10, p: 4, display: "flex", flexDirection: "column", gap: 3 }}
-      >
+        sx={{ mt: 10, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
         <Typography variant="h5" component="h1" textAlign="center" fontWeight="bold">
           OTP Tasdiqlash
         </Typography>
-
         <Typography variant="body1" textAlign="center">
           Email: <strong>{email}</strong>
         </Typography>
-
         {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
         {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
-        <Box component="form" onSubmit={handleVerifyOtp} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box  component="form" onSubmit={handleVerifyOtp} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField label="Emailga kelgan OTP kodni kiriting" variant="outlined" value={otp} onChange={(e) => setOtp(e.target.value)} required           />
 
           <Button type="submit" variant="contained" color="primary" size="large" disabled={loading}>
-            {loading ? "Tekshirilmoqda..." : "OTP tasdiqlash"}
+            <p className="text-black ">{loading ? "Tekshirilmoqda..." : "OTP tasdiqlash"}</p>
           </Button>
         </Box>
       </Paper>
