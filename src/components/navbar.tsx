@@ -15,6 +15,7 @@ import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import { useTranslation } from 'react-i18next'; 
 
+
 interface UserData {
   firstName: string;
   lastName: string;
@@ -268,7 +269,7 @@ function Navbar({ toggleColorMode }: NavbarProps) {
 
           <li className="lg:hidden">
             <button onClick={() => setSidebarOpen(true)}> 
-              <FontAwesomeIcon icon={faBars} size="2x" className="text-[#461773]" />
+              <FontAwesomeIcon icon={faBars} size="2x" className="text-[#461773]"/>
             </button>
           </li>
         </ul>

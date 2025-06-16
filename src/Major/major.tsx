@@ -193,7 +193,7 @@ const ProfilePage: React.FC = () => {
             const major = reseption.major;
             const formattedDateTime = formatDateTime(reseption.visitDate);
             return (
-              <Grid itm xs={12} sm={6} md={4} key={reseption.id} component="div">
+              <Grid  key={reseption.id} component="div">
                 <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
                   {center?.image && (
                     <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>

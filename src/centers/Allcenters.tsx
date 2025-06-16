@@ -63,7 +63,7 @@ const Allcenters: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likedCenterIds, setLikedCenterIds] = useState<Set<number>>(new Set());
   const [userLikedItemsMap, setUserLikedItemsMap] = useState<Map<number, number>>(new Map());
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null); 
+  const [, setCurrentUserId] = useState<number | null>(null); 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('info');
@@ -77,7 +77,7 @@ const Allcenters: React.FC = () => {
     setSnackbarOpen(true);
   };
 
-  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleCloseSnackbar = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

@@ -132,7 +132,7 @@ const MyCentersPage = () => {
       ) : (
         <Grid container spacing={4}>
           {centers.map((center) => (
-            <Grid item xs={12} sm={6} md={4} key={center.id} component="div" >
+            <div className="" key={center.id}>
               <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
                 <CardMedia component="img" height="200" image={getImageUrl(center.image)} alt={center.name}/>
                 <CardContent sx={{ flexGrow: 1 }}>
@@ -175,7 +175,7 @@ const MyCentersPage = () => {
                   </Stack>
                 </CardActions>
               </Card>
-            </Grid>
+            </div>
           ))}
         </Grid>
       )}
