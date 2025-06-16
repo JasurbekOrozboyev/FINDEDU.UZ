@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { Container, Typography, Box, CircularProgress, Alert, Grid, Card, CardContent, List, ListItem, ListItemText, Divider, IconButton,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -38,7 +37,6 @@ const LikedCentersPage: React.FC = () => {
   const [likedCenters, setLikedCenters] = useState<(UserLikedItem & { centerDetails?: Center })[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const BASE_URL = 'https://findcourse.net.uz'; 
 
@@ -177,7 +175,7 @@ const LikedCentersPage: React.FC = () => {
       ) : (
         <Grid container spacing={3}>
           {likedCenters!.map((like) => (
-            <Grid item xs={12} sm={6} md={4} key={like.id}>
+            <Grid key={like.id}>
               <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
                 <Box sx={{ position: 'relative' }}>
                   {like.centerDetails?.image && (
